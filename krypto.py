@@ -58,7 +58,7 @@ aboutsss = ''' Полнофункциональное приложение дл�
          - Исправлены баги.
          Версия v0.8 закончена 12.01.20 в 20:18.
 
---------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 
 
 
@@ -67,10 +67,19 @@ aboutsss = ''' Полнофункциональное приложение дл�
 
 '''
 
-from tkinter import *
-from tkinter import messagebox, simpledialog, Tk
-from tkinter import scrolledtext
-import re
+
+try:
+
+    from tkinter import *
+    from tkinter import messagebox, simpledialog, Tk
+    from tkinter import scrolledtext
+    import re
+
+except ModuleNotFoundError:
+    print("Не найдены необходимые для работы модули.\n"
+          + "Пожалуйста, прочитайте README.md для устранения ошибки.\n"
+          + "Если предложенные вам решения не помогли,\nвы можете"
+          + " обратиться к разработчику напрямую (контакты указаны в README.md).")
 
 version = 'v0.8'
 
@@ -156,17 +165,22 @@ k_words = {" ": '838599',   "\n": '918616',
            "3": '509287',   "4": '123957',
            "5": '971161',   "6": '019626',
            "7": '193672',   "8": '192582',
-           "9": '982461',   "0": '828135',
- }
+           "9": '982461',   "0": '828135', }
 
+
+# Функция записи сообщения в буфер обмена.
 def write(e):
     root.clipboard_clear()
     root.clipboard_append(e)
 
+
+# Функция считывания зашифрованного сообщения в буфер обмена.
 def read(e):
     encrypt_for_decrypt = root.clipboard_get()
     return encrypt_for_decrypt
 
+
+# Функция для шифрования передаваемых сообщений.
 def encryption(message):
     encryption_2 = []
     encryption_1 = list(message)
@@ -184,10 +198,13 @@ def encryption(message):
     del end_of_encryption
     del encrypt_word
 
+
+# Функция нахождения ключа для символа во встроенном словаре.
 def get_key(d, value):
     for k, v in d.items():
         if v == value:
             return k
+
 
 def decryption(message):
     decryption_2 = []
@@ -208,11 +225,13 @@ def decryption(message):
     del decrypt_word
     del end_of_decryption
 
+
 def get_message_for_encr():
     message = simpledialog.askstring('. . .', 'Вводите... ')
     messagebox.showinfo('Шифровка', encryption(message))
     write(encryption(message))
     return message
+
 
 def get_message_for_decr():
     try:
@@ -227,9 +246,29 @@ def get_message_for_decr():
         write(decryption(message))
 
 
-
+"""
 def about():
     messagebox.showinfo('About', aboutsss)
+"""
+
+
+def about_tk():
+    about_root = Tk()
+
+    text = Text(about_root)
+    text.pack(expand=YES, fill=BOTH)
+    text.insert('2.0', aboutsss)
+
+    scroll = Scrollbar(text, width=16, command=text.yview)
+    scroll.pack(side=RIGHT, fill=Y)
+
+    text['yscrollcommand'] = scroll.set
+
+    about_root.title("About")
+    about_root.geometry("700x500")
+    about_root["bg"] = "#49423d"
+
+    about_root.mainloop()
 
 root = Tk()
 
@@ -241,15 +280,15 @@ except TclError:
     pass
 root["bg"] = "#49423d"
 
-encryption_btn = Button(root, text = "Зашифровать", background = "#555",
-                        foreground = "#ccc", padx = "20", pady = "8",
-                        command = get_message_for_encr)
-decryption_btn = Button(root, text = "Расшифровать", background = "#555",
-                        foreground = "#ccc", padx = "17", pady = "8",
-                        command = get_message_for_decr)
-info_btn = Button(root, text = 'About', background = "#555",
-                  foreground = "#ccc", padx = "42", pady = "8",
-                  command = about)
+encryption_btn = Button(root, text="Зашифровать", background="#555",
+                        foreground="#ccc", padx="20", pady="8",
+                        command=get_message_for_encr)
+decryption_btn = Button(root, text="Расшифровать", background="#555",
+                        foreground="#ccc", padx="17", pady="8",
+                        command=get_message_for_decr)
+info_btn = Button(root, text='About', background="#555",
+                  foreground="#ccc", padx="42", pady="8",
+                  command=about_tk)
 
 encryption_btn.pack()
 decryption_btn.pack()
