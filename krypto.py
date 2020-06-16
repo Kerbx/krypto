@@ -1,5 +1,5 @@
+# Попытка импорта необходимых модулей для работы программы.
 try:
-
     from tkinter import *
     from tkinter import messagebox, simpledialog, Tk
     from tkinter import scrolledtext
@@ -138,6 +138,7 @@ def get_key(d, value):
             return k
 
 
+# Функция дешифровки сообщений.
 def decryption(message):
     decryption_2 = []
     decryption_1 = list(message)
@@ -157,6 +158,7 @@ def decryption(message):
     del end_of_decryption
 
 
+# Функция, вызываемая для получения зашифрованного сообщения.
 def get_message_for_encr() -> str:
     message = simpledialog.askstring('. . .', 'Вводите... ')
     messagebox.showinfo('Шифровка', encryption(message))
@@ -164,6 +166,7 @@ def get_message_for_encr() -> str:
     return message
 
 
+# Функция, вызываемая для получения расшифрованного сообщения.
 def get_message_for_decr() -> str:
     try:
         encrypt_for_decrypt = ''
@@ -177,9 +180,9 @@ def get_message_for_decr() -> str:
         write(decryption(message))
 
 
+# Функция просмотра информации о проекте и авторе.
 def about_tk():
     about_author = open('README.md', 'r')
-
     about_root = Tk()
 
     text = Text(about_root)
@@ -198,6 +201,7 @@ def about_tk():
     about_root.mainloop()
 
 
+# Главный цикл программы.
 root = Tk()
 
 root.title("Krypto " + version)
