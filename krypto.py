@@ -3,6 +3,8 @@ try:
     from tkinter import *
     from tkinter import messagebox, simpledialog, Tk
     from tkinter import scrolledtext
+    from tkinter import filedialog as fd
+    import os
     import re
 
 except ModuleNotFoundError:
@@ -11,7 +13,14 @@ except ModuleNotFoundError:
           + "Если предложенные вам решения не помогли,\nвы можете"
           + " обратиться к разработчику напрямую (контакты указаны в README.md).")
 
-version = 'v0.9'
+version = open("README.md")
+while True:
+    line = version.readline()
+    if "v" in line:
+        version = line
+        break
+    else:
+        continue
 
 
 # Встроенный словарь с ключами к символам для шифровки/дешифровки.
@@ -180,6 +189,50 @@ def get_message_for_decr() -> str:
         write(decryption(message))
 
 
+def read_file():
+    file = fd.askopenfilename()
+
+    try:
+        file_name = open(file, "r")
+        _file = True
+    except FileNotFoundError:
+        messagebox.showinfo("Ошибка", "Не выбран файл")
+        return
+    readed_file = file_name.read()
+
+    if _file:
+        enc_or_decr = messagebox.askquestion('Действие', 'Вы хотите зашифровать?')
+
+        if enc_or_decr == 'yes':
+            messagebox.showinfo("Шифровка", encryption(readed_file))
+            write(encryption(readed_file))
+            number_of_encr = 0
+            while True:
+                if os.path.exists("ENCR" + str(number_of_encr) + ".txt"):
+                    number_of_encr += 1
+                else:
+                    break
+            with open("ENCR" + str(number_of_encr) + ".txt", 'w') as encr_filename:
+                encr_filename.write(encryption(readed_file))
+                messagebox.showinfo("Внимание", "Шифровка файла была сохранена в файл под названием "
+                                    + encr_filename.name)
+        else:
+            enc_or_decr1 = messagebox.askquestion("Действие", "Вы хотите дешифровать?")
+            if enc_or_decr1 == 'yes':
+                messagebox.showinfo("Расшифровка", decryption(readed_file))
+                write(decryption(readed_file))
+                number_of_decr = 0
+                while True:
+                    if os.path.exists("DECR" + str(number_of_decr) + ".txt"):
+                        number_of_decr += 1
+                    else:
+                        break
+                with open("DECR" + str(number_of_decr) + ".txt", "w") as decr_filename:
+                    decr_filename.write(decryption(readed_file))
+                    messagebox.showinfo("Внимание", "Дешифровка файла была сохранены в файл под названием "
+                                        + decr_filename.name)
+
+
 # Функция просмотра информации о проекте и авторе.
 def about_tk():
     about_author = open('README.md', 'r')
@@ -221,9 +274,12 @@ decryption_btn = Button(root, text="Расшифровать", background="#555"
 info_btn = Button(root, text='About', background="#555",
                   foreground="#ccc", padx="42", pady="8",
                   command=about_tk)
-
+read_file_btn = Button(root, text='Считать файл', background='#555',
+                       foreground='#ccc', padx='20', pady='8',
+                       command=read_file)
 encryption_btn.pack()
 decryption_btn.pack()
+read_file_btn.pack()
 info_btn.pack()
 
 root.mainloop()
