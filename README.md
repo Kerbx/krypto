@@ -104,11 +104,3 @@ So it took first place then.
 
 
     Главный разработчик - Лукич.
-
-    Контакты для связи с разрабом:
-
-	GitHub - Kerbx
-	Почта: kgfsbcheckist@gmail.com
-	Telegram: @tovkoba
- 
-
